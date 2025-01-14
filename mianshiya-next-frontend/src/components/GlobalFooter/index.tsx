@@ -12,8 +12,8 @@ export default function GlobalFooter() {
     <div className="global-footer">
       <div>© {currentYear} 面试刷题平台</div>
       <div>
-        <a href="https://www.code-nav.cn" target="_blank">
-          作者：编程导航 - 程序员鱼皮
+        <a href="https://github.com/Stay2003" target="_blank">
+          作者：计科H - 程序员思源
         </a>
       </div>
     </div>

@@ -17,8 +17,8 @@ export const menus = [
     name: "题目",
   },
   {
-    name: "面试鸭",
-    path: "https://mianshiya.com",
+    name: "思源",
+    path: "https://github.com/Stay2003",
     target: "_blank",
   },
   {

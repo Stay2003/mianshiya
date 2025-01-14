@@ -1,5 +1,5 @@
-"use server";
-import { Flex, Menu, message } from "antd";
+"use client";
+import { Flex, Menu } from "antd";
 import { getQuestionBankVoByIdUsingGet } from "@/api/questionBankController";
 import Title from "antd/es/typography/Title";
 import { getQuestionVoByIdUsingGet } from "@/api/questionController";
@@ -7,71 +7,90 @@ import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import QuestionCard from "@/components/QuestionCard";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import "./index.css";
 
-/**
- * 题库题目详情页
- * @constructor
- */
-export default async function BankQuestionPage({ params }) {
+export default function BankQuestionPage({ params }) {
   const { questionBankId, questionId } = params;
+  const router = useRouter();
+  const [bank, setBank] = useState<API.QuestionBankVO | null>(null);
+  const [question, setQuestion] = useState<API.QuestionVO | null>(null);
+  const [showAnswer, setShowAnswer] = useState(false);
 
-  // 获取题库详情
-  let bank = undefined;
-  try {
-    const res = await getQuestionBankVoByIdUsingGet({
-      id: questionBankId,
-      needQueryQuestionList: true,
-      // 可以自行扩展为分页实现
-      pageSize: 200,
-    });
-    bank = res.data;
-  } catch (e) {
-    console.error("获取题库列表失败，" + e.message);
-  }
-  // 错误处理
-  if (!bank) {
-    return <div>获取题库详情失败，请刷新重试</div>;
-  }
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const bankRes = await getQuestionBankVoByIdUsingGet({
+          id: questionBankId,
+          needQueryQuestionList: true,
+          pageSize: 200,
+        });
+        setBank(bankRes.data);
 
-  // 获取题目详情
-  let question = undefined;
-  try {
-    const res = await getQuestionVoByIdUsingGet({
-      id: questionId,
-    });
-    question = res.data;
-  } catch (e) {
-    console.error("获取题目详情失败，" + e.message);
-  }
-  // 错误处理
-  if (!question) {
-    return <div>获取题目详情失败，请刷新重试</div>;
+        const questionRes = await getQuestionVoByIdUsingGet({
+          id: questionId,
+        });
+        setQuestion(questionRes.data);
+      } catch (e) {
+        console.error("获取数据失败，" + e.message);
+      }
+    }
+    fetchData();
+    setShowAnswer(false);
+  }, [questionBankId, questionId]);
+
+  if (!bank || !question) {
+    return <div>加载中...</div>;
   }
 
-  // 题目菜单列表
-  const questionMenuItemList = (bank.questionPage?.records || []).map((q) => {
-    return {
-      label: (
+  const questionMenuItemList = (bank.questionPage?.records || []).map((q) => ({
+    label: (
         <Link href={`/bank/${questionBankId}/question/${q.id}`}>{q.title}</Link>
-      ),
-      key: q.id,
-    };
-  });
+    ),
+    key: q.id,
+  }));
+
+  const currentIndex = questionMenuItemList.findIndex(
+      (item) => item.key === question.id
+  );
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      const prevQuestion = bank.questionPage.records[currentIndex - 1];
+      router.push(`/bank/${questionBankId}/question/${prevQuestion.id}`);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentIndex < questionMenuItemList.length - 1) {
+      const nextQuestion = bank.questionPage.records[currentIndex + 1];
+      router.push(`/bank/${questionBankId}/question/${nextQuestion.id}`);
+    }
+  };
 
   return (
-    <div id="bankQuestionPage">
-      <Flex gap={24}>
-        <Sider width={240} theme="light" style={{ padding: "24px 0" }}>
-          <Title level={4} style={{ padding: "0 20px" }}>
-            {bank.title}
-          </Title>
-          <Menu items={questionMenuItemList} selectedKeys={[question.id]} />
-        </Sider>
-        <Content>
-          <QuestionCard question={question} />
-        </Content>
-      </Flex>
-    </div>
+      <div id="bankQuestionPage">
+        <Flex gap={24}>
+          <Sider width={240} theme="light" style={{ padding: "24px 0" }}>
+            <Title level={4} style={{ padding: "0 20px" }}>
+              {bank.title}
+            </Title>
+            <Menu items={questionMenuItemList} selectedKeys={[question.id]} />
+          </Sider>
+          <Content>
+            <QuestionCard
+                question={question}
+                showAnswer={showAnswer}
+                onToggleAnswer={() => setShowAnswer(!showAnswer)}
+                onPrevious={handlePrevious}
+                onNext={handleNext}
+                hasPrevious={currentIndex > 0}
+                hasNext={currentIndex < questionMenuItemList.length - 1}
+            />
+          </Content>
+        </Flex>
+      </div>
   );
 }
+

@@ -1,2 +1,42 @@
-#questionBankAdminPage {
+#userCenterPage {
+    padding: 24px;
 }
+
+#userCenterPage .ant-card {
+    border-radius: 8px;
+}
+
+#userCenterPage .ant-statistic {
+    text-align: center;
+}
+
+#userCenterPage .ant-avatar {
+    border: 2px solid #f0f0f0;
+    transition: transform 0.3s ease;
+}
+
+#userCenterPage .ant-avatar:hover {
+    transform: scale(1.05);
+}
+
+#userCenterPage .ant-tag {
+    margin: 4px 0;
+}
+
+#userCenterPage .ant-card-meta-description {
+    min-height: 60px;
+}
+
+#userCenterPage .user-info-descriptions {
+    text-align: left;
+    margin-top: 16px;
+}
+
+#userCenterPage .user-info-descriptions .ant-descriptions-item {
+    padding-bottom: 8px;
+}
+
+#userCenterPage .user-info-descriptions .ant-descriptions-item-label {
+    color: rgba(0, 0, 0, 0.45);
+}
+

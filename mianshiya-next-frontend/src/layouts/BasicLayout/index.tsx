@@ -56,7 +56,7 @@ export default function BasicLayout({ children }: Props) {
       }}
     >
       <ProLayout
-        title="面试鸭刷题平台"
+        title="面试鲲刷题平台"
         layout="top"
         logo={
           <Image
@@ -121,7 +121,7 @@ export default function BasicLayout({ children }: Props) {
             <SearchInput key="search" />,
             <a
               key="github"
-              href="https://github.com/liyupi/mianshiya-next"
+              href="https://github.com/Stay2003"
               target="_blank"
             >
               <GithubFilled key="GithubFilled" />

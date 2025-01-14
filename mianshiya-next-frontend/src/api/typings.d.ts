@@ -199,6 +199,7 @@ declare namespace API {
     userName?: string;
     userProfile?: string;
     userRole?: string;
+    userEmail?: string;
   };
 
   type OrderItem = {

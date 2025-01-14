@@ -1,3 +1,48 @@
-.question-card {
-
+.question-card .answer-section {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
+
+.question-card .answer-section .ant-card {
+    flex: 1;
+}
+
+.question-card .nav-button {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.question-card .nav-button:not(:disabled):hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.question-card .nav-button:disabled {
+    background: rgba(0, 0, 0, 0.1);
+    cursor: not-allowed;
+}
+
+.question-card .nav-button .anticon {
+    color: white;
+    font-size: 16px;
+}
+
+.question-card .nav-button-left {
+    left: 284px;
+}
+
+.question-card .nav-button-right {
+    right: 60px;
+}
+

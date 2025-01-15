@@ -167,6 +167,9 @@ public class QuestionBankController {
         // 查询数据库
         QuestionBank questionBank = questionBankService.getById(id);
         ThrowUtils.throwIf(questionBank == null, ErrorCode.NOT_FOUND_ERROR);
+        // 更新题库的浏览量
+        questionBank.setViewNum(questionBank.getViewNum() + 1);
+        questionBankService.updateById(questionBank);
         // 查询题库封装类
         QuestionBankVO questionBankVO = questionBankService.getQuestionBankVO(questionBank, request);
         // 是否要关联查询题库下的题目列表
@@ -189,6 +192,19 @@ public class QuestionBankController {
         // 获取封装类
         return ResultUtils.success(questionBankVO);
     }
+
+//    /**
+//     * 获取题库浏览量
+//     *
+//     * @param id 题库id
+//     * @return 浏览量
+//     */
+//    @GetMapping("/view-count/{id}")
+//    public BaseResponse<Integer> getQuestionBankViewCount(@PathVariable Long id) {
+//        ThrowUtils.throwIf(id == null || id <= 0, ErrorCode.PARAMS_ERROR);
+//        int viewCount = questionBankService.getViewCount(id);
+//        return ResultUtils.success(viewCount);
+//    }
 
     /**
      * 分页获取题库列表（仅管理员可用）

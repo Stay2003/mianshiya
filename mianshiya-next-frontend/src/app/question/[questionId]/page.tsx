@@ -20,7 +20,7 @@ export default async function QuestionPage({params}) {
         question = res.data;
     } catch (e) {
         // @ts-ignore
-      console.error("获取题目详情失败，" + e.message);
+        message.error("获取题目详情失败，" + e.message);
     }
     // 错误处理
     if (!question) {

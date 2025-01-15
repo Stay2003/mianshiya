@@ -23,9 +23,11 @@ export default async function HomePage() {
       sortField: "createTime",
       sortOrder: "descend",
     });
+    // @ts-ignore
     questionBankList = res.data.records ?? [];
   } catch (e) {
-    console.error("获取题库列表失败，" + e.message);
+    // @ts-ignore
+    message.error("获取题库列表失败，" + e.message);
   }
 
   try {
@@ -34,24 +36,27 @@ export default async function HomePage() {
       sortField: "createTime",
       sortOrder: "descend",
     });
+    // @ts-ignore
     questionList = res.data.records ?? [];
   } catch (e) {
-    console.error("获取题目列表失败，" + e.message);
+    // @ts-ignore
+    message.error("获取题目列表失败，" + e.message);
   }
 
   return (
-    <div id="homePage" className="max-width-content">
-      <Flex justify="space-between" align="center">
-        <Title level={3}>最新题库</Title>
-        <Link href={"/banks"}>查看更多</Link>
-      </Flex>
-      <QuestionBankList questionBankList={questionBankList} />
-      <Divider />
-      <Flex justify="space-between" align="center">
-        <Title level={3}>最新题目</Title>
-        <Link href={"/questions"}>查看更多</Link>
-      </Flex>
-      <QuestionList questionList={questionList} />
-    </div>
+      <div id="homePage" className="max-width-content">
+        <Flex justify="space-between" align="center">
+          <Title level={3}>最新题库</Title>
+          <Link href={"/banks"}>查看更多</Link>
+        </Flex>
+        <QuestionBankList questionBankList={questionBankList} />
+        <Divider />
+        <Flex justify="space-between" align="center">
+          <Title level={3}>最新题目</Title>
+          <Link href={"/questions"}>查看更多</Link>
+        </Flex>
+        <QuestionList questionList={questionList} />
+      </div>
   );
 }
+

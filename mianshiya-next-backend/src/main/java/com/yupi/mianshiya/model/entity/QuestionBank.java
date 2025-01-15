@@ -60,6 +60,12 @@ public class QuestionBank implements Serializable {
     @TableLogic
     private Integer isDelete;
 
+    /**
+     * 浏览量
+     */
+    private Integer viewNum;
+
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

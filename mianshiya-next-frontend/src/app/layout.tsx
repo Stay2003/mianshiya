@@ -25,6 +25,7 @@ const InitLayout: React.FC<
     const res = await getLoginUserUsingGet();
     if (res.data) {
       // 更新全局用户状态
+      // @ts-ignore
       dispatch(setLoginUser(res.data));
     } else {
       // 仅用于测试

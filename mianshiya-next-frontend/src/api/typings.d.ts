@@ -553,6 +553,7 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
+    viewNum?: number;
   };
 
   type QuestionBatchDeleteRequest = {

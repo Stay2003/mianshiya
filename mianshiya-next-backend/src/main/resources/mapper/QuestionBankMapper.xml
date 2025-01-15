@@ -14,11 +14,12 @@
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+            <result property="viewNum" column="viewNum" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,title,description,
         picture,userId,editTime,
-        createTime,updateTime,isDelete
+        createTime,updateTime,isDelete,viewNum
     </sql>
 </mapper>

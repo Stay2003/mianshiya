@@ -9,7 +9,7 @@
 }
 
 .question-card .nav-button {
-    position: fixed;
+    position: fixed; /* 保持为绝对定位 */
     top: 50%;
     transform: translateY(-50%);
     width: 40px;
@@ -39,10 +39,9 @@
 }
 
 .question-card .nav-button-left {
-    left: 284px;
+    left: 0; /* 靠左 */
 }
 
 .question-card .nav-button-right {
-    right: 60px;
+    right: 0; /* 靠右 */
 }
-

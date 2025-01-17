@@ -56,14 +56,14 @@ export default function BasicLayout({ children }: Props) {
       }}
     >
       <ProLayout
-        title="面试鲲刷题平台"
+        title="刷题鸭刷题平台"
         layout="top"
         logo={
           <Image
             src="/assets/logo.png"
             height={32}
             width={32}
-            alt="面试鸭刷题网站 - 程序员鱼皮"
+            alt="刷题鸭刷题网站 - 程序员鱼皮"
           />
         }
         location={{

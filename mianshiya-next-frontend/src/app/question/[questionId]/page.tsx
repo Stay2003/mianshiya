@@ -1,35 +1,47 @@
-"use server";
-import {message} from "antd";
-import {getQuestionVoByIdUsingGet} from "@/api/questionController";
+"use client";
+
+import { message } from "antd";
+import { getQuestionVoByIdUsingGet } from "@/api/questionController";
 import QuestionCard from "@/components/QuestionCard";
+import { useState, useEffect } from "react";
 import "./index.css";
 
-/**
- * 题目详情页
- * @constructor
- */
-export default async function QuestionPage({params}) {
-    const {questionId} = params;
+export default function QuestionPage({ params }) {
+    const { questionId } = params;
+    const [showAnswer, setShowAnswer] = useState(false);
+    const [question, setQuestion] = useState<API.QuestionVO | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    // 获取题目详情
-    let question = undefined;
-    try {
-        const res = await getQuestionVoByIdUsingGet({
-            id: questionId,
-        });
-        question = res.data;
-    } catch (e) {
-        // @ts-ignore
-        message.error("获取题目详情失败，" + e.message);
-    }
-    // 错误处理
-    if (!question) {
-        return <div>获取题目详情失败，请刷新重试</div>;
+    useEffect(() => {
+        async function fetchQuestion() {
+            setLoading(true);
+            try {
+                const res = await getQuestionVoByIdUsingGet({
+                    id: questionId,
+                });
+                setQuestion(res.data);
+            } catch (e) {
+                message.error("获取题目详情失败，" + e.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchQuestion();
+        setShowAnswer(false);
+    }, [questionId]);
+
+    if (loading || !question) {
+        return <div>加载中...</div>;
     }
 
-  return (
+    return (
         <div id="questionPage">
-            <QuestionCard question={question}/>
+            <QuestionCard
+                question={question}
+                showAnswer={showAnswer}
+                onToggleAnswer={() => setShowAnswer(!showAnswer)}
+            />
         </div>
     );
 }
+

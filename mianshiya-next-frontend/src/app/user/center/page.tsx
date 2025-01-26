@@ -1,64 +1,63 @@
-"use client";
-import {Avatar, Button, Card, Col, Row, Tag, Tooltip, Descriptions, message} from "antd";
-import {useSelector} from "react-redux";
-import {RootState} from "@/stores";
-import Title from "antd/es/typography/Title";
-import {useState} from "react";
-import {EditOutlined, IdcardOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
-import {updateMyUserUsingPost} from "@/api/userController";
-import "./index.css";
-import UserStats from "@/app/user/center/components/UserStats";
-import CalendarChart from "@/app/user/center/components/CalendarChart";
-import EditProfileModal from "@/app/user/center/components/EditProfileModal";
+"use client"
+import { Avatar, Button, Card, Col, Row, Tag, Tooltip, Descriptions, message } from "antd"
+import { useSelector } from "react-redux"
+import type { RootState } from "@/stores"
+import Title from "antd/es/typography/Title"
+import { useState } from "react"
+import { EditOutlined, IdcardOutlined, MailOutlined, UserOutlined } from "@ant-design/icons"
+import { updateMyUserUsingPost } from "@/api/userController"
+import "./index.css"
+import UserStats from "@/app/user/center/components/UserStats"
+import CalendarChart from "@/app/user/center/components/CalendarChart"
+import EditProfileModal from "@/app/user/center/components/EditProfileModal"
+import FavoriteQuestions from "@/app/user/center/components/FavoriteQuestions"
+import FavoriteQuestionList from "./components/FavoriteQuestionList"
 
 export default function UserCenterPage() {
-    const loginUser = useSelector((state: RootState) => state.loginUser);
-    const user = loginUser;
-    const [activeTabKey, setActiveTabKey] = useState<string>("record");
-    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+    const loginUser = useSelector((state: RootState) => state.loginUser)
+    const user = loginUser
+    const [activeTabKey, setActiveTabKey] = useState<string>("record")
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false)
 
     // 模拟用户统计数据
     const userStats = {
         totalQuestions: 156,
         streak: 7,
         achievements: 12,
-    };
+    }
 
     const handleEditProfile = async (values: API.UserUpdateMyRequest) => {
         try {
-            const res = await updateMyUserUsingPost(values);
+            const res = await updateMyUserUsingPost(values)
             // @ts-ignore
             if (res.code === 0) {
-                message.success('更新成功');
-                setIsEditModalVisible(false);
+                message.success("更新成功")
+                setIsEditModalVisible(false)
                 // TODO: 更新 Redux 中的用户信息
             } else {
                 // @ts-ignore
-                message.error(res.message || '更新失败');
+                message.error(res.message || "更新失败")
             }
         } catch (error) {
-            message.error('操作失败，请重试');
+            message.error("操作失败，请重试")
         }
-    };
+    }
 
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
     return (
         <div id="userCenterPage" className="max-width-content">
             <Row gutter={[16, 16]}>
                 <Col xs={24} md={6}>
-                    <Card style={{textAlign: "center"}}>
-                        <Avatar src={user.userAvatar} size={72}/>
-                        <div style={{marginBottom: 16}}/>
+                    <Card style={{ textAlign: "center" }}>
+                        <Avatar src={user.userAvatar} size={72} />
+                        <div style={{ marginBottom: 16 }} />
                         <Card.Meta
                             title={
-                                <div style={{marginBottom: 8}}>
-                                    <Title level={4} style={{marginBottom: 4}}>
+                                <div style={{ marginBottom: 8 }}>
+                                    <Title level={4} style={{ marginBottom: 4 }}>
                                         {user.userName}
                                     </Title>
                                     <Tooltip title="用户ID">
-                                        <Tag icon={<IdcardOutlined/>} color="blue">
+                                        <Tag icon={<IdcardOutlined />} color="blue">
                                             {user.id}
                                         </Tag>
                                     </Tooltip>
@@ -66,26 +65,13 @@ export default function UserCenterPage() {
                             }
                             description={
                                 <>
-                                    <Descriptions
-                                        column={1}
-                                        className="user-info-descriptions"
-                                        size="small"
-                                    >
-                                        <Descriptions.Item label={<UserOutlined/>}>
-                                            {user.userName}
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label={<MailOutlined/>}>
-                                            {user.userEmail || '未设置邮箱'}
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label="简介">
-                                            {user.userProfile || '这个人很懒，什么都没写~'}
-                                        </Descriptions.Item>
+                                    <Descriptions column={1} className="user-info-descriptions" size="small">
+                                        <Descriptions.Item label={<UserOutlined />}>{user.userName}</Descriptions.Item>
+                                        <Descriptions.Item label={<MailOutlined />}>{user.userEmail || "未设置邮箱"}</Descriptions.Item>
+                                        <Descriptions.Item label="简介">{user.userProfile || "这个人很懒，什么都没写~"}</Descriptions.Item>
                                     </Descriptions>
-                                    <div style={{marginTop: 16}}>
-                                        <Button
-                                            icon={<EditOutlined/>}
-                                            onClick={() => setIsEditModalVisible(true)}
-                                        >
+                                    <div style={{ marginTop: 16 }}>
+                                        <Button icon={<EditOutlined />} onClick={() => setIsEditModalVisible(true)}>
                                             编辑资料
                                         </Button>
                                     </div>
@@ -103,6 +89,10 @@ export default function UserCenterPage() {
                                 label: "刷题记录",
                             },
                             {
+                                key: "favorites",
+                                label: "我的收藏",
+                            },
+                            {
                                 key: "achievements",
                                 label: "成就",
                             },
@@ -113,23 +103,20 @@ export default function UserCenterPage() {
                         ]}
                         activeTabKey={activeTabKey}
                         onTabChange={(key: string) => {
-                            setActiveTabKey(key);
+                            setActiveTabKey(key)
                         }}
                     >
                         {activeTabKey === "record" && (
                             <>
-                                <CalendarChart/>
+                                <CalendarChart />
                             </>
                         )}
+                        {activeTabKey === "favorites" && <FavoriteQuestionList />}
                         {activeTabKey === "achievements" && (
-                            <div style={{minHeight: 200, textAlign: "center", padding: 20}}>
-                                成就系统开发中...
-                            </div>
+                            <div style={{ minHeight: 200, textAlign: "center", padding: 20 }}>成就系统开发中...</div>
                         )}
                         {activeTabKey === "settings" && (
-                            <div style={{minHeight: 200, textAlign: "center", padding: 20}}>
-                                设置功能开发中...
-                            </div>
+                            <div style={{ minHeight: 200, textAlign: "center", padding: 20 }}>设置功能开发中...</div>
                         )}
                     </Card>
                 </Col>
@@ -140,13 +127,13 @@ export default function UserCenterPage() {
                 onCancel={() => setIsEditModalVisible(false)}
                 onSubmit={handleEditProfile}
                 initialValues={{
-                    userName: user.userName || '',
-                    userProfile: user.userProfile || '',
+                    userName: user.userName || "",
+                    userProfile: user.userProfile || "",
                     userEmail: user.userEmail,
-                    userAvatar: user.userAvatar || '',
+                    userAvatar: user.userAvatar || "",
                 }}
             />
         </div>
-    );
+    )
 }
 

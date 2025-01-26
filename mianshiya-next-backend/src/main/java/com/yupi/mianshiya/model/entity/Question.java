@@ -65,6 +65,9 @@ public class Question implements Serializable {
     @TableLogic
     private Integer isDelete;
 
+    @TableField(value = "favourNum")
+    private Integer favourNum;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

@@ -1,16 +1,17 @@
-import { updateUserUsingPost } from '@/api/userController';
-import { ProColumns, ProTable } from '@ant-design/pro-components';
-import { message, Modal, Upload } from 'antd';
-import { RcFile } from 'antd/es/upload';
-import { PlusOutlined } from '@ant-design/icons';
-import React, { useState, useEffect } from 'react';
+import { updateUserUsingPost } from "@/api/userController"
+import { type ProColumns, ProTable } from "@ant-design/pro-components"
+import { message, Modal, Upload } from "antd"
+import type { RcFile } from "antd/es/upload"
+import { PlusOutlined } from "@ant-design/icons"
+import type React from "react"
+import { useState, useEffect } from "react"
 
 interface Props {
-  oldData?: API.User;
-  visible: boolean;
-  columns: ProColumns<API.User>[];
-  onSubmit: (values: API.UserAddRequest) => void;
-  onCancel: () => void;
+    oldData?: API.User
+    visible: boolean
+    columns: ProColumns<API.User>[]
+    onSubmit: (values: API.UserAddRequest) => void
+    onCancel: () => void
 }
 
 /**
@@ -19,11 +20,11 @@ interface Props {
  */
 const getBase64 = (file: RcFile): Promise<string> =>
     new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result as string)
+        reader.onerror = (error) => reject(error)
+    })
 
 /**
  * 更新节点
@@ -31,18 +32,18 @@ const getBase64 = (file: RcFile): Promise<string> =>
  * @param fields
  */
 const handleUpdate = async (fields: API.UserUpdateRequest) => {
-  const hide = message.loading('正在更新');
-  try {
-    await updateUserUsingPost(fields);
-    hide();
-    message.success('更新成功');
-    return true;
-  } catch (error: any) {
-    hide();
-    console.error('更新失败，' + error.message);
-    return false;
-  }
-};
+    const hide = message.loading("正在更新")
+    try {
+        await updateUserUsingPost(fields)
+        hide()
+        message.success("更新成功")
+        return true
+    } catch (error: any) {
+        hide()
+        console.error("更新失败，" + error.message)
+        return false
+    }
+}
 
 /**
  * 更新弹窗
@@ -50,97 +51,101 @@ const handleUpdate = async (fields: API.UserUpdateRequest) => {
  * @constructor
  */
 const UpdateModal: React.FC<Props> = (props) => {
-  const { oldData, visible, columns, onSubmit, onCancel } = props;
-  const [imageUrl, setImageUrl] = useState<string>();
-  const [loading, setLoading] = useState(false);
+    const { oldData, visible, columns, onSubmit, onCancel } = props
+    const [imageUrl, setImageUrl] = useState<string>()
+    const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (oldData && oldData.picture) {
-      setImageUrl(oldData.picture);
+    useEffect(() => {
+        if (oldData && oldData.userAvatar) {
+            setImageUrl(oldData.userAvatar)
+        }
+    }, [oldData])
+
+    const getBase64 = (file: RcFile): Promise<string> =>
+        new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => resolve(reader.result as string)
+            reader.onerror = (error) => reject(error)
+        })
+
+    const handleUpload = async (file: RcFile) => {
+        try {
+            setLoading(true)
+            const base64 = await getBase64(file)
+            setImageUrl(base64)
+            return false // 阻止默认上传行为
+        } catch (error) {
+            message.error("图片上传失败")
+            return false
+        } finally {
+            setLoading(false)
+        }
     }
-  }, [oldData]);
 
-  const handleUpload = async (file: RcFile) => {
-    try {
-      setLoading(true);
-      const base64 = await getBase64(file);
-      setImageUrl(base64);
-      return false; // 阻止默认上传行为
-    } catch (error) {
-      message.error('图片上传失败');
-      return false;
-    } finally {
-      setLoading(false);
+    const uploadButton = (
+        <div>
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>上传</div>
+        </div>
+    )
+
+    if (!oldData) {
+        return <></>
     }
-  };
 
-  const uploadButton = (
-      <div>
-        <PlusOutlined />
-        <div style={{ marginTop: 8 }}>上传</div>
-      </div>
-  );
-
-  if (!oldData) {
-    return <></>;
-  }
-
-  return (
-      <Modal
-          destroyOnClose
-          title={'更新'}
-          open={visible}
-          footer={null}
-          onCancel={() => {
-            setImageUrl(oldData.picture);
-            onCancel?.();
-          }}
-      >
-        <ProTable
-            type="form"
-            columns={[
-              ...columns,
-              {
-                title: "图片",
-                dataIndex: "picture",
-                renderFormItem: () => (
-                    <Upload
-                        name="picture"
-                        listType="picture-card"
-                        showUploadList={false}
-                        beforeUpload={handleUpload}
-                    >
-                      {imageUrl ? (
-                          <img
-                              src={imageUrl}
-                              alt="avatar"
-                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
-                      ) : (
-                          uploadButton
-                      )}
-                    </Upload>
-                ),
-              },
-            ]}
-            form={{
-              initialValues: oldData,
+    return (
+        <Modal
+            destroyOnClose
+            title={"更新"}
+            open={visible}
+            footer={null}
+            onCancel={() => {
+                setImageUrl(oldData.userAvatar)
+                onCancel?.()
             }}
-            onSubmit={async (values: API.UserAddRequest) => {
-              if (imageUrl) {
-                values.picture = imageUrl;
-              }
-              const success = await handleUpdate({
-                ...values,
-                id: oldData.id as any,
-              });
-              if (success) {
-                onSubmit?.(values);
-              }
-            }}
-        />
-      </Modal>
-  );
-};
+        >
+            <ProTable
+                type="form"
+                columns={[
+                    ...columns,
+                    {
+                        title: "头像",
+                        dataIndex: "userAvatar",
+                        renderFormItem: () => (
+                            <Upload name="userAvatar" listType="picture-card" showUploadList={false} beforeUpload={handleUpload}>
+                                {imageUrl ? (
+                                    <img
+                                        src={imageUrl || "/placeholder.svg"}
+                                        alt="avatar"
+                                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                    />
+                                ) : (
+                                    uploadButton
+                                )}
+                            </Upload>
+                        ),
+                    },
+                ]}
+                form={{
+                    initialValues: oldData,
+                }}
+                onSubmit={async (values: API.UserAddRequest) => {
+                    if (imageUrl) {
+                        values.userAvatar = imageUrl
+                    }
+                    const success = await handleUpdate({
+                        ...values,
+                        id: oldData.id as any,
+                    })
+                    if (success) {
+                        onSubmit?.(values)
+                    }
+                }}
+            />
+        </Modal>
+    )
+}
 
-export default UpdateModal;
+export default UpdateModal
+

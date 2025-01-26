@@ -11,7 +11,6 @@ import java.util.List;
 
 /**
  * 题目视图
- *
  */
 @Data
 public class QuestionVO implements Serializable {
@@ -62,6 +61,26 @@ public class QuestionVO implements Serializable {
     private UserVO user;
 
     /**
+     * 收藏数
+     */
+    private Integer favourNum;
+
+    /**
+     * 创建用户名
+     */
+    private String userName;
+
+    /**
+     * 创建用户头像
+     */
+    private String userAvatar;
+
+    /**
+     * 当前用户是否已收藏
+     */
+    private Boolean isFavour;
+
+    /**
      * 封装类转对象
      *
      * @param questionVO
@@ -92,5 +111,18 @@ public class QuestionVO implements Serializable {
         BeanUtils.copyProperties(question, questionVO);
         questionVO.setTagList(JSONUtil.toList(JSONUtil.parseArray(question.getTags()), String.class));
         return questionVO;
+    }
+
+    /**
+     * 填充用户信息
+     *
+     * @param user
+     */
+    public void fillUserInfo(UserVO user) {
+        if (user != null) {
+            this.setUserName(user.getUserName());
+            this.setUserAvatar(user.getUserAvatar());
+            this.setUser(user);
+        }
     }
 }

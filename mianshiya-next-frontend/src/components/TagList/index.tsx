@@ -1,25 +1,24 @@
-import { Tag } from "antd";
-import "./index.css";
+import { Tag } from "antd"
+import type React from "react"
+import "./index.css"
 
 interface Props {
-  tagList?: string[];
+  tagList?: string[]
 }
 
-/**
- * 标签列表组件
- * @param props
- * @constructor
- */
-const TagList = (props: Props) => {
-  const { tagList = [] } = props;
+const TagList: React.FC<Props> = ({ tagList }) => {
+  if (!tagList || tagList.length === 0) {
+    return null
+  }
 
   return (
-    <div className="tag-list">
-      {tagList.map((tag) => {
-        return <Tag key={tag}>{tag}</Tag>;
-      })}
-    </div>
-  );
-};
+      <div className="tag-list">
+        {tagList.map((tag) => {
+          return <Tag key={tag}>{tag}</Tag>
+        })}
+      </div>
+  )
+}
 
-export default TagList;
+export default TagList
+

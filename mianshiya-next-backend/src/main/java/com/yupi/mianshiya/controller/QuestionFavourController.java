@@ -74,5 +74,16 @@ public class QuestionFavourController {
         Page<QuestionVO> questionPage = questionFavourService.listFavourQuestionByPage(questionFavourQueryRequest);
         return ResultUtils.success(questionPage);
     }
+
+    @GetMapping("/get")
+    public BaseResponse<Boolean> getQuestionFavour(@RequestParam Long questionId, HttpServletRequest request) {
+        if (questionId == null || questionId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long userId = userService.getLoginUser(request).getId();
+        boolean isFavour = questionFavourService.isQuestionFavoured(userId, questionId);
+        return ResultUtils.success(isFavour);
+    }
+
 }
 

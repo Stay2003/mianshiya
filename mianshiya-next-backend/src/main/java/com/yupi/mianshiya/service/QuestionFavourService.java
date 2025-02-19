@@ -44,6 +44,8 @@ public interface QuestionFavourService extends IService<QuestionFavour> {
 
     long getUserFavourQuestionCount(Long userId);
 
+    boolean isQuestionFavoured(Long userId, Long questionId);
+
 //    /**
 //     * 获取题目封装（包含收藏状态）
 //     * @param question

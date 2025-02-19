@@ -193,4 +193,17 @@ public class QuestionFavourServiceImpl extends ServiceImpl<QuestionFavourMapper,
                 .eq("userId", userId)
                 .eq("isDelete", 0));
     }
+
+    @Override
+    public boolean isQuestionFavoured(Long userId, Long questionId) {
+        if (userId == null || questionId == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        QueryWrapper<QuestionFavour> questionFavourQueryWrapper = new QueryWrapper<>();
+        questionFavourQueryWrapper.eq("userId", userId);
+        questionFavourQueryWrapper.eq("questionId", questionId);
+        questionFavourQueryWrapper.eq("isDelete", 0);
+        long count = this.count(questionFavourQueryWrapper);
+        return count > 0;
+    }
 }

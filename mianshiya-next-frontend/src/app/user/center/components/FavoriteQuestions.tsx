@@ -52,6 +52,7 @@ const FavoriteQuestions = () => {
                             question={{
                                 ...question,
                                 tagList: question.tagList || [],
+                                isFavour: false, // 或者根据实际情况初始化为true
                             }}
                         />
                     </List.Item>

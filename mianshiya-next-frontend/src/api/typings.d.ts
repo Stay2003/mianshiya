@@ -29,6 +29,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageMessageBoardVO_ = {
+    code?: number;
+    data?: PageMessageBoardVO_;
+    message?: string;
+  };
+
   type BaseResponsePagePost_ = {
     code?: number;
     data?: PagePost_;
@@ -146,6 +152,41 @@ declare namespace API {
     id?: number;
   };
 
+  type doLoginUsingDELETEParams = {
+    /** password */
+    password?: string;
+    /** username */
+    username?: string;
+  };
+
+  type doLoginUsingGETParams = {
+    /** password */
+    password?: string;
+    /** username */
+    username?: string;
+  };
+
+  type doLoginUsingPATCHParams = {
+    /** password */
+    password?: string;
+    /** username */
+    username?: string;
+  };
+
+  type doLoginUsingPOSTParams = {
+    /** password */
+    password?: string;
+    /** username */
+    username?: string;
+  };
+
+  type doLoginUsingPUTParams = {
+    /** password */
+    password?: string;
+    /** username */
+    username?: string;
+  };
+
   type getPostVOByIdUsingGETParams = {
     /** id */
     id?: number;
@@ -191,20 +232,68 @@ declare namespace API {
     id?: number;
   };
 
+  type likeMessageUsingPOSTParams = {
+    /** messageId */
+    messageId: number;
+  };
+
+  type listMessageUsingGETParams = {
+    /** current */
+    current?: number;
+    /** pageSize */
+    pageSize?: number;
+    /** questionId */
+    questionId: number;
+  };
+
   type LoginUserVO = {
     createTime?: string;
     id?: number;
     updateTime?: string;
     userAvatar?: string;
+    userEmail?: string;
     userName?: string;
     userProfile?: string;
     userRole?: string;
-    userEmail?: string;
+  };
+
+  type MessageBoard = {
+    content?: string;
+    createTime?: string;
+    id?: number;
+    isDelete?: number;
+    likeCount?: number;
+    questionId?: number;
+    reportCount?: number;
+    updateTime?: string;
+    userId?: number;
+  };
+
+  type MessageBoardVO = {
+    content?: string;
+    createTime?: string;
+    id?: number;
+    likeCount?: number;
+    reportCount?: number;
+    user?: UserVO;
   };
 
   type OrderItem = {
     asc?: boolean;
     column?: string;
+  };
+
+  type PageMessageBoardVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: MessageBoardVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
   };
 
   type PagePost_ = {
@@ -423,6 +512,7 @@ declare namespace API {
     content?: string;
     createTime?: string;
     editTime?: string;
+    favourNum?: number;
     id?: number;
     isDelete?: number;
     tags?: string;
@@ -448,6 +538,7 @@ declare namespace API {
     title?: string;
     updateTime?: string;
     userId?: number;
+    viewNum?: number;
   };
 
   type QuestionBankAddRequest = {
@@ -568,6 +659,19 @@ declare namespace API {
     title?: string;
   };
 
+  type QuestionFavourAddRequest = {
+    questionId?: number;
+  };
+
+  type QuestionFavourQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    questionId?: number;
+    sortField?: string;
+    sortOrder?: string;
+    userId?: number;
+  };
+
   type QuestionQueryRequest = {
     answer?: string;
     content?: string;
@@ -596,12 +700,21 @@ declare namespace API {
     answer?: string;
     content?: string;
     createTime?: string;
+    favourNum?: number;
     id?: number;
+    isFavour?: boolean;
     tagList?: string[];
     title?: string;
     updateTime?: string;
     user?: UserVO;
+    userAvatar?: string;
     userId?: number;
+    userName?: string;
+  };
+
+  type reportMessageUsingPOSTParams = {
+    /** messageId */
+    messageId: number;
   };
 
   type uploadFileUsingPOSTParams = {
@@ -618,6 +731,7 @@ declare namespace API {
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;
+    userEmail?: string;
     userName?: string;
     userPassword?: string;
     userProfile?: string;
@@ -662,6 +776,7 @@ declare namespace API {
 
   type UserUpdateMyRequest = {
     userAvatar?: string;
+    userEmail?: string;
     userName?: string;
     userProfile?: string;
   };
@@ -678,6 +793,7 @@ declare namespace API {
     createTime?: string;
     id?: number;
     userAvatar?: string;
+    userEmail?: string;
     userName?: string;
     userProfile?: string;
     userRole?: string;

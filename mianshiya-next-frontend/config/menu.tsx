@@ -13,6 +13,10 @@ export const menus = [
     name: "题库",
   },
   {
+    path: "/ranking",
+    name: "排行榜",
+  },
+  {
     path: "/questions",
     name: "题目",
   },

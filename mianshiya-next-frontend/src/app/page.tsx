@@ -40,7 +40,7 @@ export default async function HomePage() {
     questionList = res.data.records ?? [];
   } catch (e) {
     // @ts-ignore
-    message.error("获取题目列表失败，" + e.message);
+    console.error("获取题目列表失败，" + e.message);
   }
 
   return (

@@ -18,8 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Nacos 监听器
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
+
  */
 @Slf4j
 // todo 取消注释开启 Nacos（须先配置 Nacos）

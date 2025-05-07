@@ -22,22 +22,19 @@ const InitLayout: React.FC<
   const dispatch = useDispatch<AppDispatch>();
   // 初始化全局用户状态
   const doInitLoginUser = useCallback(async () => {
-    const res = await getLoginUserUsingGet();
-    if (res.data) {
-      // 更新全局用户状态
-      // @ts-ignore
-      dispatch(setLoginUser(res.data));
-    } else {
-      // 仅用于测试
-      // setTimeout(() => {
-      //   const testUser = {
-      //     userName: "测试登录",
-      //     id: 1,
-      //     userAvatar: "https://www.code-nav.cn/logo.png",
-      //     userRole: ACCESS_ENUM.ADMIN
-      //   };
-      //   dispatch(setLoginUser(testUser));
-      // }, 3000);
+    try {
+      const res = await getLoginUserUsingGet();
+      if (res.data) {
+        // 更新全局用户状态
+        // @ts-ignore
+        dispatch(setLoginUser(res.data));
+      }
+    } catch (error: any) {
+      console.error('获取用户信息失败:', error);
+      // 如果是网络错误，可能是后端服务未启动
+      if (error.message === 'Network Error') {
+        console.error('请确保后端服务已启动，并且端口为8101');
+      }
     }
   }, []);
 

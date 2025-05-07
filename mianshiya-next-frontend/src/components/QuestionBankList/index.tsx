@@ -15,7 +15,6 @@ interface Props {
  */
 const QuestionBankList = (props: Props) => {
     const { questionBankList = [] } = props;
-
     const questionBankView = (questionBank: API.QuestionBankVO) => {
         return (
             <Card>

@@ -22,75 +22,75 @@ const UserLoginPage: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
 
-    /**
-     * 提交
-     */
     const doSubmit = async (values: API.UserLoginRequest) => {
         try {
             const res = await userLoginUsingPost(values);
             if (res.data) {
                 message.success("登录成功");
-                // 保存用户登录状态
-                // @ts-ignore
-              dispatch(setLoginUser(res.data));
+                dispatch(setLoginUser(res.data));
                 router.replace("/");
                 form.resetFields();
             }
         } catch (e) {
-            // @ts-ignore
-          message.error("登录失败，" + e.message);
+            console.error("登录失败，" + e.message);
         }
     };
 
     return (
-        <div id="userLoginPage">
-            <LoginForm
-                form={form}
-                logo={
-                    <Image src="/assets/logo.png" alt="面试鸭" height={44} width={44}/>
-                }
-                title="刷题鸭 - 用户登录"
-                subTitle="程序员面试刷题网站"
-                onFinish={doSubmit}
-            >
-                <ProFormText
-                    name="userAccount"
-                    fieldProps={{
-                        size: "large",
-                        prefix: <UserOutlined/>,
-                    }}
-                    placeholder={"请输入用户账号"}
-                    rules={[
-                        {
-                            required: true,
-                            message: "请输入用户账号!",
-                        },
-                    ]}
-                />
-                <ProFormText.Password
-                    name="userPassword"
-                    fieldProps={{
-                        size: "large",
-                        prefix: <LockOutlined/>,
-                    }}
-                    placeholder={"请输入密码"}
-                    rules={[
-                        {
-                            required: true,
-                            message: "请输入密码！",
-                        },
-                    ]}
-                />
-                <div
-                    style={{
-                        marginBlockEnd: 24,
-                        textAlign: "end",
-                    }}
-                >
-                    还没有账号？
-                    <Link href={"/user/register"}>去注册</Link>
+        <div className="login-container">
+            <div className="login-content">
+                <div className="login-header">
+                    <Image 
+                        src="/assets/logo.png" 
+                        alt="面试鸭" 
+                        height={64} 
+                        width={64}
+                        className="login-logo"
+                    />
+                    <h1 className="login-title">刷题鸭</h1>
+                    <p className="login-subtitle">程序员面试刷题网站</p>
                 </div>
-            </LoginForm>
+
+                <LoginForm
+                    form={form}
+                    onFinish={doSubmit}
+                    className="login-form"
+                >
+                    <ProFormText
+                        name="userAccount"
+                        fieldProps={{
+                            size: "large",
+                            prefix: <UserOutlined className="form-icon" />,
+                        }}
+                        placeholder="请输入用户账号"
+                        rules={[
+                            {
+                                required: true,
+                                message: "请输入用户账号!",
+                            },
+                        ]}
+                    />
+                    <ProFormText.Password
+                        name="userPassword"
+                        fieldProps={{
+                            size: "large",
+                            prefix: <LockOutlined className="form-icon" />,
+                        }}
+                        placeholder="请输入密码"
+                        rules={[
+                            {
+                                required: true,
+                                message: "请输入密码！",
+                            },
+                        ]}
+                    />
+                    <div className="login-actions">
+                        <Link href="/user/register" className="register-link">
+                            还没有账号？去注册
+                        </Link>
+                    </div>
+                </LoginForm>
+            </div>
         </div>
     );
 };

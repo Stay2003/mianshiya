@@ -38,8 +38,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 题库接口
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
  */
 @RestController
 @RequestMapping("/questionBank")
@@ -163,7 +161,6 @@ public class QuestionBankController {
 //                return ResultUtils.success((QuestionBankVO) cachedQuestionBankVO);
 //            }
 //        }
-
         // 查询数据库
         QuestionBank questionBank = questionBankService.getById(id);
         ThrowUtils.throwIf(questionBank == null, ErrorCode.NOT_FOUND_ERROR);
@@ -184,11 +181,9 @@ public class QuestionBankController {
             Page<QuestionVO> questionVOPage = questionService.getQuestionVOPage(questionPage, request);
             questionBankVO.setQuestionPage(questionVOPage);
         }
-
         // todo 取消注释开启 HotKey（须确保 HotKey 依赖被打进 jar 包）
-//        // 设置本地缓存（如果不是热 key，这个方法不会设置缓存）
-//        JdHotKeyStore.smartSet(key, questionBankVO);
-
+        // 设置本地缓存（如果不是热 key，这个方法不会设置缓存）
+        //JdHotKeyStore.smartSet(key, questionBankVO);
         // 获取封装类
         return ResultUtils.success(questionBankVO);
     }
@@ -248,7 +243,7 @@ public class QuestionBankController {
     }
 
     /**
-     * listQuestionBankVOByPage 流控操作（此处为了方便演示，写在同一个类中）
+     * listQuestionBankVOByPage 流控操作（为了方便，写在同一个类中）
      * 限流：提示“系统压力过大，请耐心等待”
      * 熔断：执行降级操作
      */

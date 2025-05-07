@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 /**
  * hotkey 热 key 发现配置
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航</a>
  */
 // todo 取消注释开启 HotKey（须先配置 HotKey）
 //@Configuration

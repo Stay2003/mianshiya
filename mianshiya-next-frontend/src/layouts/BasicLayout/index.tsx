@@ -63,7 +63,7 @@ export default function BasicLayout({ children }: Props) {
             src="/assets/logo.png"
             height={32}
             width={32}
-            alt="刷题鸭刷题网站 - 程序员鱼皮"
+            alt="刷题鸭刷题网站 - 程序员思源"
           />
         }
         location={{
@@ -72,7 +72,7 @@ export default function BasicLayout({ children }: Props) {
         avatarProps={{
           src: loginUser.userAvatar || "/assets/logo.png",
           size: "small",
-          title: loginUser.userName || "鱼皮鸭",
+          title: loginUser.userName || "思源鸭",
           render: (props, dom) => {
             if (!loginUser.id) {
               return (

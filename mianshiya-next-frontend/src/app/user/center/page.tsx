@@ -18,25 +18,23 @@ export default function UserCenterPage() {
     const user = loginUser
     const [activeTabKey, setActiveTabKey] = useState<string>("record")
     const [isEditModalVisible, setIsEditModalVisible] = useState(false)
-
+ 
     // 模拟用户统计数据
     const userStats = {
         totalQuestions: 156,
-        streak: 7,
-        achievements: 12,
+        streak: 1,
+        achievements: 1,
     }
 
     const handleEditProfile = async (values: API.UserUpdateMyRequest) => {
         try {
             const res = await updateMyUserUsingPost(values)
-            // @ts-ignore
-            if (res.code === 0) {
+            if (res.data?.code === 0) {
                 message.success("更新成功")
                 setIsEditModalVisible(false)
                 // TODO: 更新 Redux 中的用户信息
             } else {
-                // @ts-ignore
-                message.error(res.message || "更新失败")
+                message.error(res.data?.message || "更新失败")
             }
         } catch (error) {
             message.error("操作失败，请重试")
@@ -44,83 +42,91 @@ export default function UserCenterPage() {
     }
 
     return (
-        <div id="userCenterPage" className="max-width-content">
-            <Row gutter={[16, 16]}>
-                <Col xs={24} md={6}>
-                    <Card style={{ textAlign: "center" }}>
-                        <Avatar src={user.userAvatar} size={72} />
-                        <div style={{ marginBottom: 16 }} />
-                        <Card.Meta
-                            title={
-                                <div style={{ marginBottom: 8 }}>
-                                    <Title level={4} style={{ marginBottom: 4 }}>
-                                        {user.userName}
-                                    </Title>
-                                    <Tooltip title="用户ID">
-                                        <Tag icon={<IdcardOutlined />} color="blue">
-                                            {user.id}
-                                        </Tag>
-                                    </Tooltip>
+        <div className="user-center-container">
+            <div className="user-center-content">
+                <Row gutter={[24, 24]}>
+                    <Col xs={24} md={6}>
+                        <Card className="user-profile-card">
+                            <div className="user-avatar-wrapper">
+                                <Avatar src={user.userAvatar} size={96} className="user-avatar" />
+                            </div>
+                            <div className="user-info">
+                                <Title level={4} className="user-name">
+                                    {user.userName}
+                                </Title>
+                                <Tooltip title="用户ID">
+                                    <Tag icon={<IdcardOutlined />} color="blue" className="user-id-tag">
+                                        {user.id}
+                                    </Tag>
+                                </Tooltip>
+                            </div>
+                            <Descriptions column={1} className="user-info-descriptions" size="small">
+                                <Descriptions.Item label={<UserOutlined />}>{user.userName}</Descriptions.Item>
+                                <Descriptions.Item label={<MailOutlined />}>{user.userEmail || "未设置邮箱"}</Descriptions.Item>
+                                <Descriptions.Item label="简介">{user.userProfile || "这个人很懒，什么都没写~"}</Descriptions.Item>
+                            </Descriptions>
+                            <Button 
+                                icon={<EditOutlined />} 
+                                onClick={() => setIsEditModalVisible(true)}
+                                className="edit-profile-button"
+                            >
+                                编辑资料
+                            </Button>
+                        </Card>
+                    </Col>
+                    <Col xs={24} md={18}>
+                        <UserStats {...userStats} />
+                        <Card
+                            className="user-content-card"
+                            tabList={[
+                                {
+                                    key: "record",
+                                    label: "刷题记录",
+                                },
+                                {
+                                    key: "favorites",
+                                    label: "我的收藏",
+                                },
+                                {
+                                    key: "achievements",
+                                    label: "成就",
+                                },
+                                {
+                                    key: "settings",
+                                    label: "设置",
+                                },
+                            ]}
+                            activeTabKey={activeTabKey}
+                            onTabChange={(key: string) => {
+                                setActiveTabKey(key)
+                            }}
+                        >
+                            {activeTabKey === "record" && (
+                                <div className="tab-content">
+                                    <CalendarChart />
                                 </div>
-                            }
-                            description={
-                                <>
-                                    <Descriptions column={1} className="user-info-descriptions" size="small">
-                                        <Descriptions.Item label={<UserOutlined />}>{user.userName}</Descriptions.Item>
-                                        <Descriptions.Item label={<MailOutlined />}>{user.userEmail || "未设置邮箱"}</Descriptions.Item>
-                                        <Descriptions.Item label="简介">{user.userProfile || "这个人很懒，什么都没写~"}</Descriptions.Item>
-                                    </Descriptions>
-                                    <div style={{ marginTop: 16 }}>
-                                        <Button icon={<EditOutlined />} onClick={() => setIsEditModalVisible(true)}>
-                                            编辑资料
-                                        </Button>
-                                    </div>
-                                </>
-                            }
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} md={18}>
-                    <UserStats {...userStats} />
-                    <Card
-                        tabList={[
-                            {
-                                key: "record",
-                                label: "刷题记录",
-                            },
-                            {
-                                key: "favorites",
-                                label: "我的收藏",
-                            },
-                            {
-                                key: "achievements",
-                                label: "成就",
-                            },
-                            {
-                                key: "settings",
-                                label: "设置",
-                            },
-                        ]}
-                        activeTabKey={activeTabKey}
-                        onTabChange={(key: string) => {
-                            setActiveTabKey(key)
-                        }}
-                    >
-                        {activeTabKey === "record" && (
-                            <>
-                                <CalendarChart />
-                            </>
-                        )}
-                        {activeTabKey === "favorites" && <FavoriteQuestionList />}
-                        {activeTabKey === "achievements" && (
-                            <div style={{ minHeight: 200, textAlign: "center", padding: 20 }}>成就系统开发中...</div>
-                        )}
-                        {activeTabKey === "settings" && (
-                            <div style={{ minHeight: 200, textAlign: "center", padding: 20 }}>设置功能开发中...</div>
-                        )}
-                    </Card>
-                </Col>
-            </Row>
+                            )}
+                            {activeTabKey === "favorites" && (
+                                <div className="tab-content">
+                                    <FavoriteQuestionList />
+                                </div>
+                            )}
+                            {activeTabKey === "achievements" && (
+                                <div className="tab-content empty-state">
+                                    <div className="empty-icon">🏆</div>
+                                    <p>成就系统开发中...</p>
+                                </div>
+                            )}
+                            {activeTabKey === "settings" && (
+                                <div className="tab-content empty-state">
+                                    <div className="empty-icon">⚙️</div>
+                                    <p>设置功能开发中...</p>
+                                </div>
+                            )}
+                        </Card>
+                    </Col>
+                </Row>
+            </div>
 
             <EditProfileModal
                 open={isEditModalVisible}

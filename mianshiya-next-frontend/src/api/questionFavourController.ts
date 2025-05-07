@@ -2,16 +2,6 @@
 /* eslint-disable */
 import request from '@/libs/request';
 
-export async function getQuestionFavourUsingGet(params: {
-  questionId: number | string
-}) {
-  return request<API.BaseResponseBoolean_>("/api/question_favour/get", {
-    method: "GET",
-    params: { ...params },
-  })
-}
-
-
 /** doQuestionFavour POST /api/question_favour/ */
 export async function doQuestionFavourUsingPost(
   body: API.QuestionFavourAddRequest,
@@ -23,6 +13,21 @@ export async function doQuestionFavourUsingPost(
       'Content-Type': 'application/json',
     },
     data: body,
+    ...(options || {}),
+  });
+}
+
+/** getQuestionFavour GET /api/question_favour/get */
+export async function getQuestionFavourUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getQuestionFavourUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseBoolean_>('/api/question_favour/get', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
     ...(options || {}),
   });
 }

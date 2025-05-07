@@ -108,16 +108,15 @@ public class QuestionFavourServiceImpl extends ServiceImpl<QuestionFavourMapper,
         Long userId = questionFavourQueryRequest.getUserId();
         long current = questionFavourQueryRequest.getCurrent();
         long size = questionFavourQueryRequest.getPageSize();
-
         // 限制爬虫
         if (size > 20) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-
         // 查询收藏的题目信息
         Page<Question> questionPage = questionService.page(new Page<>(current, size),
                 new QueryWrapper<Question>()
-                        .inSql("id", "select questionId from question_favour where userId = " + userId + " and isDelete = 0")
+                        .inSql("id",
+                                "select questionId from question_favour where userId = " + userId + " and isDelete = 0")
                         .orderByDesc("createTime"));
         List<Question> questionList = questionPage.getRecords();
 
@@ -127,7 +126,6 @@ public class QuestionFavourServiceImpl extends ServiceImpl<QuestionFavourMapper,
                 .collect(Collectors.toSet());
         Map<Long, User> userMap = userService.listByIds(userIds).stream()
                 .collect(Collectors.toMap(User::getId, user -> user));
-
         // 填充信息
         List<QuestionVO> questionVOList = questionList.stream().map(question -> {
             QuestionVO questionVO = getQuestionVO(question);

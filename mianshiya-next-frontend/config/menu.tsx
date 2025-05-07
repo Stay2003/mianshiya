@@ -1,49 +1,74 @@
 import { MenuDataItem } from "@ant-design/pro-layout";
-import { CrownOutlined } from "@ant-design/icons";
+import { 
+  HomeOutlined, 
+  BookOutlined, 
+  TrophyOutlined, 
+  QuestionCircleOutlined,
+  GithubOutlined,
+  CrownOutlined,
+  UserOutlined,
+  DatabaseOutlined,
+  FileTextOutlined,
+  MessageOutlined
+} from "@ant-design/icons";
 import ACCESS_ENUM from "@/access/accessEnum";
 
 // 菜单列表
 export const menus = [
   {
     path: "/",
-    name: "主页",
+    name: "首页",
+    icon: <HomeOutlined />,
   },
   {
     path: "/banks",
-    name: "题库",
+    name: "题库中心",
+    icon: <BookOutlined />,
   },
   {
     path: "/ranking",
     name: "排行榜",
+    icon: <TrophyOutlined />,
   },
   {
     path: "/questions",
-    name: "题目",
+    name: "题目集",
+    icon: <QuestionCircleOutlined />,
   },
   {
-    name: "思源",
+    name: "GitHub",
     path: "https://github.com/Stay2003",
     target: "_blank",
+    icon: <GithubOutlined />,
   },
   {
     path: "/admin",
-    name: "管理",
+    name: "管理后台",
     icon: <CrownOutlined />,
     access: ACCESS_ENUM.ADMIN,
     children: [
       {
         path: "/admin/user",
         name: "用户管理",
+        icon: <UserOutlined />,
         access: ACCESS_ENUM.ADMIN,
       },
       {
         path: "/admin/bank",
         name: "题库管理",
+        icon: <DatabaseOutlined />,
         access: ACCESS_ENUM.ADMIN,
       },
       {
         path: "/admin/question",
         name: "题目管理",
+        icon: <FileTextOutlined />,
+        access: ACCESS_ENUM.ADMIN,
+      },
+      {
+        path: "/admin/messages",
+        name: "留言管理",
+        icon: <MessageOutlined />,
         access: ACCESS_ENUM.ADMIN,
       },
     ],

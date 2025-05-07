@@ -23,9 +23,8 @@ import java.util.List;
 /**
  * Sentinel 限流熔断规则管理器
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
  */
+@SuppressWarnings("AlibabaAvoidCommentBehindStatement")
 @Component
 public class SentinelRulesManager {
 
@@ -67,7 +66,6 @@ public class SentinelRulesManager {
                 .setTimeWindow(60) // 熔断持续时间 60 秒
                 .setStatIntervalMs(30 * 1000) // 统计时长 30 秒
                 .setMinRequestAmount(10); // 最小请求数
-
         // 加载规则
         DegradeRuleManager.loadRules(Arrays.asList(slowCallRule, errorRateRule));
     }

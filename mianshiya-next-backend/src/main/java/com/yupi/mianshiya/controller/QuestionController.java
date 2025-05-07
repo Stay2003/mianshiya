@@ -40,8 +40,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * 题目接口
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
  */
 @RestController
 @RequestMapping("/question")
@@ -362,7 +360,7 @@ public class QuestionController {
         long size = questionQueryRequest.getPageSize();
         // 限制爬虫
         ThrowUtils.throwIf(size > 200, ErrorCode.PARAMS_ERROR);
-        // todo 取消注释开启 ES（须先配置 ES）
+        // todo 取消注释开启 ES（先配置 ES）
         // 查询 ES
         // Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
         // 查询数据库（作为没有 ES 的降级方案）

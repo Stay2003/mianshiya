@@ -1,73 +1,85 @@
-"use client";
-import { Flex, Menu } from "antd";
-import { getQuestionBankVoByIdUsingGet } from "@/api/questionBankController";
-import Title from "antd/es/typography/Title";
-import { getQuestionVoByIdUsingGet } from "@/api/questionController";
-import Sider from "antd/es/layout/Sider";
-import { Content } from "antd/es/layout/layout";
-import QuestionCard from "@/components/QuestionCard";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import "./index.css";
+"use client"
+import { Flex, Menu } from "antd"
+import { getQuestionBankVoByIdUsingGet } from "@/api/questionBankController"
+import Title from "antd/es/typography/Title"
+import { getQuestionVoByIdUsingGet } from "@/api/questionController"
+import { getQuestionFavourUsingGet } from "@/api/questionFavourController"
+import Sider from "antd/es/layout/Sider"
+import { Content } from "antd/es/layout/layout"
+import QuestionCard from "@/components/QuestionCard"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import type * as API from "@/api/typings"
+import "./index.css"
 
+// @ts-ignore
 export default function BankQuestionPage({ params }) {
-  const { questionBankId, questionId } = params;
-  const router = useRouter();
-  const [bank, setBank] = useState<API.QuestionBankVO | null>(null);
-  const [question, setQuestion] = useState<API.QuestionVO | null>(null);
-  const [showAnswer, setShowAnswer] = useState(false);
+  const { questionBankId, questionId } = params
+  const router = useRouter()
+  const [bank, setBank] = useState<API.QuestionBankVO | null>(null)
+  const [question, setQuestion] = useState<API.QuestionVO | null>(null)
+  const [showAnswer, setShowAnswer] = useState(false)
+  const [isFavour, setIsFavour] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const bankRes = await getQuestionBankVoByIdUsingGet({
-          id: questionBankId,
-          needQueryQuestionList: true,
-          pageSize: 200,
-        });
-        setBank(bankRes.data);
+        const [bankRes, questionRes, favourRes] = await Promise.all([
+          getQuestionBankVoByIdUsingGet({
+            id: questionBankId,
+            needQueryQuestionList: true,
+            pageSize: 200,
+          }),
+          getQuestionVoByIdUsingGet({
+            id: questionId,
+          }),
+          getQuestionFavourUsingGet({ questionId }),
+        ])
 
-        const questionRes = await getQuestionVoByIdUsingGet({
-          id: questionId,
-        });
-        setQuestion(questionRes.data);
+        setBank(bankRes.data)
+        setQuestion(questionRes.data)
+        // @ts-ignore
+        setIsFavour(favourRes.data)
       } catch (e) {
-        console.error("获取数据失败，" + e.message);
+        // @ts-ignore
+        console.error("获取数据失败，" + e.message)
       }
     }
-    fetchData();
-    setShowAnswer(false);
-  }, [questionBankId, questionId]);
+    fetchData()
+    setShowAnswer(false)
+  }, [questionBankId, questionId])
 
   if (!bank || !question) {
-    return <div>加载中...</div>;
+    return <div>加载中...</div>
   }
+  // @ts-ignore
 
   const questionMenuItemList = (bank.questionPage?.records || []).map((q) => ({
-    label: (
-        <Link href={`/bank/${questionBankId}/question/${q.id}`}>{q.title}</Link>
-    ),
+    label: <Link href={`/bank/${questionBankId}/question/${q.id}`}>{q.title}</Link>,
     key: q.id,
-  }));
+  }))
 
-  const currentIndex = questionMenuItemList.findIndex(
-      (item) => item.key === question.id
-  );
+  // @ts-ignore
+  const currentIndex = questionMenuItemList.findIndex((item) => item.key === question.id)
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
-      const prevQuestion = bank.questionPage.records[currentIndex - 1];
-      router.push(`/bank/${questionBankId}/question/${prevQuestion.id}`);
+      const prevQuestion = bank.questionPage.records[currentIndex - 1]
+      router.push(`/bank/${questionBankId}/question/${prevQuestion.id}`)
     }
-  };
+  }
 
   const handleNext = () => {
     if (currentIndex < questionMenuItemList.length - 1) {
-      const nextQuestion = bank.questionPage.records[currentIndex + 1];
-      router.push(`/bank/${questionBankId}/question/${nextQuestion.id}`);
+      const nextQuestion = bank.questionPage.records[currentIndex + 1]
+      router.push(`/bank/${questionBankId}/question/${nextQuestion.id}`)
     }
-  };
+  }
+
+  const handleFavourChange = (newFavourStatus: boolean) => {
+    setIsFavour(newFavourStatus)
+  }
 
   return (
       <div id="bankQuestionPage">
@@ -80,17 +92,18 @@ export default function BankQuestionPage({ params }) {
           </Sider>
           <Content>
             <QuestionCard
-                question={question}
+                question={{ ...question, isFavour }}
                 showAnswer={showAnswer}
                 onToggleAnswer={() => setShowAnswer(!showAnswer)}
                 onPrevious={handlePrevious}
                 onNext={handleNext}
                 hasPrevious={currentIndex > 0}
                 hasNext={currentIndex < questionMenuItemList.length - 1}
+                onFavourChange={handleFavourChange}
             />
           </Content>
         </Flex>
       </div>
-  );
+  )
 }
 

@@ -1,6 +1,7 @@
 package com.yupi.mianshiya.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -167,6 +168,9 @@ public class QuestionBankQuestionController {
      * @return
      */
     @PostMapping("/list/page/vo")
+//    @SentinelResource(value = "listQuestionBankQuestionVOByPage",
+//            blockHandler = "blockleException",
+//            fallback = "handleFallback")
     public BaseResponse<Page<QuestionBankQuestionVO>> listQuestionBankQuestionVOByPage(@RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest,
                                                                                        HttpServletRequest request) {
         long current = questionBankQuestionQueryRequest.getCurrent();

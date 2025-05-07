@@ -4,51 +4,48 @@ import { message } from "antd"
 import { getQuestionVoByIdUsingGet } from "@/api/questionController"
 import { getQuestionFavourUsingGet } from "@/api/questionFavourController"
 import QuestionCard from "@/components/QuestionCard"
+import MessageBoard from "@/components/MessageBoard"
 import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import "./index.css"
-import type React from "react"
 
-// @ts-ignore
-export default function QuestionPage({ params }) {
+interface PageProps {
+    params: {
+        questionId: string
+    }
+}
+
+export default function QuestionPage({ params }: PageProps) {
     const { questionId } = params
     const searchParams = useSearchParams()
-    const fromFavorites = searchParams.get("fromFavorites") === "true"
+    const fromFavorites = searchParams?.get("fromFavorites") === "true"
 
     const [showAnswer, setShowAnswer] = useState(false)
     const [question, setQuestion] = useState<API.QuestionVO | null>(null)
-    const [isFavour, setIsFavour] = useState<boolean>(fromFavorites)
+    const [isFavour, setIsFavour] = useState<boolean>(false)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         async function fetchQuestionAndFavourStatus() {
             setLoading(true)
             try {
-                const questionRes = await getQuestionVoByIdUsingGet({ id: questionId })
-                // @ts-ignore
-                if (questionRes.code === 0 && questionRes.data) {
-                    // @ts-ignore
-                    setQuestion(questionRes.data)
-                } else {
-                    // @ts-ignore
-                    message.error(questionRes.message || "获取题目详情失败")
-                }
+                const questionRes = await getQuestionVoByIdUsingGet({ id: Number(questionId) })
+                if (questionRes.data?.code === 0 && questionRes.data.data) {
+                    setQuestion(questionRes.data.data)
 
-                if (!fromFavorites) {
                     try {
-                        const favourRes = await getQuestionFavourUsingGet({ questionId })
-                        // @ts-ignore
-                        if (favourRes.code === 0) {
-                            // @ts-ignore
-                            setIsFavour(favourRes.data)
+                        const favourRes = await getQuestionFavourUsingGet({ questionId: Number(questionId) })
+                        if (favourRes.data?.code === 0) {
+                            setIsFavour(favourRes.data.data)
                         }
                     } catch (favourError) {
                         console.error("Failed to fetch favourite status:", favourError)
-                        setIsFavour(false)
+                        setIsFavour(fromFavorites)
                     }
+                } else {
+                    message.error(questionRes.data?.message || "获取题目详情失败")
                 }
-            } catch (e) {
-                // @ts-ignore
+            } catch (e: any) {
                 message.error("获取题目信息失败，" + e.message)
             } finally {
                 setLoading(false)
@@ -64,17 +61,29 @@ export default function QuestionPage({ params }) {
     }
 
     if (loading || !question) {
-        return <div>加载中...</div>
+        return (
+            <div className="question-loading">
+                <div className="loading-spinner"></div>
+                <p>加载中...</p>
+            </div>
+        )
     }
 
     return (
-        <div id="questionPage">
-            <QuestionCard
-                question={{ ...question, isFavour }}
-                showAnswer={showAnswer}
-                onToggleAnswer={() => setShowAnswer(!showAnswer)}
-                onFavourChange={handleFavourChange}
-            />
+        <div className="question-container">
+            <div className="question-content">
+                <QuestionCard
+                    question={{ ...question, isFavour }}
+                    showAnswer={showAnswer}
+                    onToggleAnswer={() => setShowAnswer(!showAnswer)}
+                    onFavourChange={handleFavourChange}
+                />
+
+                <div className="message-section">
+                    <h2 className="message-title">留言讨论</h2>
+                    <MessageBoard questionId={Number(questionId)} />
+                </div>
+            </div>
         </div>
     )
 }

@@ -32,8 +32,7 @@ public class QuestionFavourController {
     private UserService userService;
 
     /**
-     * 收藏 / 取消收藏
-     *
+     * 收藏 / 取消收藏 题目
      * @param questionFavourAddRequest
      * @param request
      * @return resultNum 收藏变化数
@@ -52,14 +51,14 @@ public class QuestionFavourController {
 
     /**
      * 获取我收藏的题目列表
-     *
      * @param questionFavourQueryRequest
      * @param request
      * @return
      */
     @PostMapping("/my/list/page")
-    public BaseResponse<Page<QuestionVO>> listMyFavourQuestionByPage(@RequestBody QuestionFavourQueryRequest questionFavourQueryRequest,
-                                                                     HttpServletRequest request) {
+    public BaseResponse<Page<QuestionVO>> listMyFavourQuestionByPage
+    (@RequestBody QuestionFavourQueryRequest questionFavourQueryRequest,
+                  HttpServletRequest request) {
         if (questionFavourQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

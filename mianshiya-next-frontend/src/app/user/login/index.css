@@ -1,2 +1,141 @@
 #userLoginPage {
 }
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  padding: 24px;
+}
+
+.login-content {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 48px;
+  animation: fadeIn 0.5s ease;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login-logo {
+  margin-bottom: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(45deg, #1890ff, #722ed1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.login-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 8px 0 0;
+}
+
+.login-form {
+  margin-top: 32px;
+}
+
+.form-icon {
+  color: #1890ff;
+}
+
+.login-actions {
+  margin-top: 24px;
+  text-align: right;
+}
+
+.register-link {
+  color: #1890ff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.register-link:hover {
+  color: #40a9ff;
+  text-decoration: underline;
+}
+
+/* 输入框样式覆盖 */
+:global(.ant-pro-form-login-main) {
+  max-width: none;
+  padding: 0;
+}
+
+:global(.ant-pro-form-login-main .ant-pro-form-login-other) {
+  margin-top: 24px;
+}
+
+:global(.ant-input-affix-wrapper) {
+  border-radius: 12px;
+  padding: 8px 16px;
+  height: 48px;
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s ease;
+}
+
+:global(.ant-input-affix-wrapper:hover),
+:global(.ant-input-affix-wrapper-focused) {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+}
+
+:global(.ant-btn-primary) {
+  height: 48px;
+  border-radius: 12px;
+  font-size: 16px;
+  background: linear-gradient(45deg, #1890ff, #722ed1);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+:global(.ant-btn-primary:hover) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+  background: linear-gradient(45deg, #40a9ff, #9254de);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  .login-content {
+    padding: 36px 28px;
+  }
+
+  .login-title {
+    font-size: 28px;
+  }
+
+  .login-subtitle {
+    font-size: 14px;
+  }
+}

@@ -1,6 +1,4 @@
 "use server";
-import Title from "antd/es/typography/Title";
-import { message } from "antd";
 import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController";
 import QuestionBankList from "@/components/QuestionBankList";
 import "./index.css";
@@ -11,25 +9,40 @@ import "./index.css";
  */
 export default async function BanksPage() {
   let questionBankList = [];
-  // 题库数量不多，直接全量获取
   const pageSize = 200;
+  
   try {
     const res = await listQuestionBankVoByPageUsingPost({
       pageSize,
       sortField: "createTime",
       sortOrder: "descend",
     });
-    // @ts-ignore
     questionBankList = res.data.records ?? [];
-  } catch (e) {
-    // @ts-ignore
-    console.error("获取题库列表失败，" + e.message);
+  } catch (error: any) {
+    console.error("获取题库列表失败，" + error.message);
   }
 
   return (
-    <div id="banksPage" className="max-width-content">
-      <Title level={3}>题库大全</Title>
-      <QuestionBankList questionBankList={questionBankList} />
+    <div className="banks-container">
+      <div className="banks-header">
+        <h1 className="banks-title">题库大全</h1>
+        <p className="banks-subtitle">探索丰富的编程题库，提升你的编程技能</p>
+      </div>
+
+      <div className="banks-content">
+        {questionBankList.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">📚</div>
+            <p className="empty-text">暂无题库</p>
+          </div>
+        ) : (
+          <QuestionBankList 
+            questionBankList={questionBankList} 
+            className="banks-grid"
+          />
+        )}
+      </div>
     </div>
   );
 }
+

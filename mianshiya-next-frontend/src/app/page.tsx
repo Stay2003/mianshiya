@@ -44,19 +44,25 @@ export default async function HomePage() {
   }
 
   return (
-      <div id="homePage" className="max-width-content">
-        <Flex justify="space-between" align="center">
-          <Title level={3}>最新题库</Title>
-          <Link href={"/banks"}>查看更多</Link>
-        </Flex>
+    <div id="homePage" className="max-width-content modern-home">
+      <div className="section-header">
+        <Title level={3} className="section-title">最新题库</Title>
+        <Link href={"/banks"} className="view-more-link">查看更多</Link>
+      </div>
+      <div className="content-wrapper">
         <QuestionBankList questionBankList={questionBankList} />
-        <Divider />
-        <Flex justify="space-between" align="center">
-          <Title level={3}>最新题目</Title>
-          <Link href={"/questions"}>查看更多</Link>
-        </Flex>
+      </div>
+      
+      <Divider className="custom-divider" />
+      
+      <div className="section-header">
+        <Title level={3} className="section-title">最新题目</Title>
+        <Link href={"/questions"} className="view-more-link">查看更多</Link>
+      </div>
+      <div className="content-wrapper">
         <QuestionList questionList={questionList} />
       </div>
+    </div>
   );
 }
 

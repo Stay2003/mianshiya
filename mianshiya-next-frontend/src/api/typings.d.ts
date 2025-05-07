@@ -29,9 +29,15 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponsePageMessageBoardVO_ = {
+  type BaseResponsePageMessageBoardManageVO_ = {
     code?: number;
-    data?: PageMessageBoardVO_;
+    data?: PageMessageBoardManageVO_;
+    message?: string;
+  };
+
+  type BaseResponsePageObject_ = {
+    code?: number;
+    data?: PageObject_;
     message?: string;
   };
 
@@ -148,6 +154,11 @@ declare namespace API {
     timestamp?: string;
   };
 
+  type deleteMessageUsingDELETEParams = {
+    /** messageId */
+    messageId: number;
+  };
+
   type DeleteRequest = {
     id?: number;
   };
@@ -212,6 +223,11 @@ declare namespace API {
     userId?: number;
   };
 
+  type getQuestionFavourUsingGETParams = {
+    /** questionId */
+    questionId: number;
+  };
+
   type getQuestionVOByIdUsingGETParams = {
     /** id */
     id?: number;
@@ -237,13 +253,20 @@ declare namespace API {
     messageId: number;
   };
 
+  type listMessageManageUsingGETParams = {
+    /** current */
+    current?: number;
+    /** pageSize */
+    pageSize?: number;
+  };
+
   type listMessageUsingGETParams = {
     /** current */
     current?: number;
     /** pageSize */
     pageSize?: number;
     /** questionId */
-    questionId: number;
+    questionId?: number;
   };
 
   type LoginUserVO = {
@@ -262,6 +285,7 @@ declare namespace API {
     createTime?: string;
     id?: number;
     isDelete?: number;
+    isPinned?: number;
     likeCount?: number;
     questionId?: number;
     reportCount?: number;
@@ -269,13 +293,17 @@ declare namespace API {
     userId?: number;
   };
 
-  type MessageBoardVO = {
+  type MessageBoardManageVO = {
     content?: string;
     createTime?: string;
     id?: number;
+    isPinned?: number;
     likeCount?: number;
+    questionId?: number;
+    questionTitle?: string;
     reportCount?: number;
-    user?: UserVO;
+    userId?: number;
+    userName?: string;
   };
 
   type OrderItem = {
@@ -283,14 +311,27 @@ declare namespace API {
     column?: string;
   };
 
-  type PageMessageBoardVO_ = {
+  type PageMessageBoardManageVO_ = {
     countId?: string;
     current?: number;
     maxLimit?: number;
     optimizeCountSql?: boolean;
     orders?: OrderItem[];
     pages?: number;
-    records?: MessageBoardVO[];
+    records?: MessageBoardManageVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageObject_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: Record<string, any>[];
     searchCount?: boolean;
     size?: number;
     total?: number;
@@ -424,6 +465,11 @@ declare namespace API {
     searchCount?: boolean;
     size?: number;
     total?: number;
+  };
+
+  type pinMessageUsingPOSTParams = {
+    /** messageId */
+    messageId: number;
   };
 
   type Post = {
@@ -715,6 +761,15 @@ declare namespace API {
   type reportMessageUsingPOSTParams = {
     /** messageId */
     messageId: number;
+  };
+
+  type searchMessageUsingGETParams = {
+    /** current */
+    current?: number;
+    /** pageSize */
+    pageSize?: number;
+    /** searchText */
+    searchText?: string;
   };
 
   type uploadFileUsingPOSTParams = {

@@ -1,3 +1,187 @@
 #bankQuestionPage {
-    width: 100%;
+    padding: 24px;
+    background-color: #f5f7fa;
+    min-height: calc(100vh - 64px);
+}
+
+#bankQuestionPage .ant-layout-sider {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+#bankQuestionPage .ant-layout-sider:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+#bankQuestionPage .ant-typography {
+    margin-bottom: 16px !important;
+    color: #1a1a1a;
+}
+
+#bankQuestionPage .ant-menu {
+    border-right: none;
+}
+
+#bankQuestionPage .ant-menu-item {
+    margin: 4px 0;
+    padding: 8px 20px !important;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+#bankQuestionPage .ant-menu-item:hover {
+    background-color: #f0f7ff;
+}
+
+#bankQuestionPage .ant-menu-item-selected {
+    background-color: #e6f4ff !important;
+    color: #1890ff !important;
+}
+
+#bankQuestionPage .ant-menu-item a {
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+#bankQuestionPage .ant-menu-item:hover a {
+    color: #1890ff;
+}
+
+#bankQuestionPage .ant-layout-content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+#bankQuestionPage .ant-layout-content:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* 题目卡片样式 */
+.question-card {
+    background: white;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.question-card .ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 24px;
+}
+
+.question-card .ant-card-head-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.question-card .ant-card-body {
+    padding: 24px;
+}
+
+.question-content {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+}
+
+.question-answer {
+    margin-top: 24px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #1890ff;
+}
+
+.question-answer-title {
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+}
+
+.question-answer-content {
+    color: #333;
+    line-height: 1.8;
+}
+
+.question-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.question-navigation {
+    display: flex;
+    gap: 12px;
+}
+
+.question-navigation-button {
+    min-width: 100px;
+    height: 36px;
+    border-radius: 18px;
+    font-weight: 500;
+}
+
+.question-favour-button {
+    padding: 8px 16px;
+    border-radius: 18px;
+    transition: all 0.3s ease;
+}
+
+.question-favour-button:hover {
+    transform: scale(1.05);
+}
+
+/* 加载状态样式 */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    #bankQuestionPage {
+        padding: 16px;
+    }
+
+    #bankQuestionPage .ant-layout-sider {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        margin-bottom: 16px;
+    }
+
+    #bankQuestionPage .ant-layout-content {
+        padding: 16px;
+    }
+
+    .question-card .ant-card-body {
+        padding: 16px;
+    }
+
+    .question-actions {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .question-navigation {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .question-navigation-button {
+        flex: 1;
+    }
 }

@@ -1,11 +1,10 @@
 "use client"
 
 import React, { useCallback } from "react"
-import { Card, List, Space, Tooltip } from "antd"
-import { FireOutlined, EyeOutlined } from "@ant-design/icons"
 import { useEffect, useState } from "react"
 import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController"
 import { useRouter } from "next/navigation"
+import "./index.css"
 
 interface QuestionBankVO {
     id: number
@@ -27,9 +26,7 @@ export default function RankingPage() {
                 sortField: "viewNum",
                 sortOrder: "desc",
             })
-            // @ts-ignore
             if (res?.data?.records) {
-                // @ts-ignore
                 setRankings(res.data.records)
             }
         } catch (error) {
@@ -43,73 +40,60 @@ export default function RankingPage() {
     }, [fetchRankings])
 
     const handleBankClick = (id: number) => {
-        // 使用 router.push 进行导航，确保路径与你的实际路由结构匹配
         router.push(`/bank/${id}`)
     }
 
-    const getRankingColor = (index: number) => {
-        switch (index) {
-            case 0:
-                return "#f5222d"
-            case 1:
-                return "#fa8c16"
-            case 2:
-                return "#faad14"
-            default:
-                return "#8c8c8c"
-        }
-    }
-
     return (
-        <div className="p-4">
-            <Card title="题库排行榜">
-                <List<QuestionBankVO>
-                    loading={loading}
-                    dataSource={rankings}
-                    renderItem={(item, index) => (
-                        <List.Item>
-                            <List.Item.Meta
-                                avatar={
-                                    <div
-                                        style={{
-                                            width: 24,
-                                            height: 24,
-                                            borderRadius: "50%",
-                                            background: getRankingColor(index),
-                                            color: "#fff",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        {index + 1}
-                                    </div>
-                                }
-                                title={
-                                    <Space>
-                                        <a
-                                            onClick={() => handleBankClick(item.id)}
-                                            className="text-blue-600 hover:text-blue-800 cursor-pointer"
-                                        >
-                                            {item.title}
-                                        </a>
+        <div className="ranking-container">
+            <div className="ranking-header">
+                <h1 className="ranking-title">题库排行榜</h1>
+                <p className="ranking-subtitle">最受欢迎的题库集合</p>
+            </div>
+
+            <div className="ranking-content">
+                {loading ? (
+                    <div className="loading-skeleton">
+                        {[...Array(10)].map((_, index) => (
+                            <div key={index} className="skeleton-item">
+                                <div className="skeleton-rank"></div>
+                                <div className="skeleton-info">
+                                    <div className="skeleton-title"></div>
+                                    <div className="skeleton-views"></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="ranking-list">
+                        {rankings.map((item, index) => (
+                            <div 
+                                key={item.id} 
+                                className={`ranking-item ${index < 3 ? 'top-rank' : ''}`}
+                                onClick={() => handleBankClick(item.id)}
+                            >
+                                <div className={`rank-number rank-${index + 1}`}>
+                                    {index + 1}
+                                </div>
+                                <div className="rank-info">
+                                    <h3 className="rank-title">
+                                        {item.title}
                                         {index < 3 && (
-                                            <Tooltip title="热门题库">
-                                                <FireOutlined style={{ color: getRankingColor(index) }} />
-                                            </Tooltip>
+                                            <span className="hot-badge">
+                                                <span className="fire-icon">🔥</span>
+                                                热门
+                                            </span>
                                         )}
-                                    </Space>
-                                }
-                            />
-                            <Space>
-                                <EyeOutlined />
-                                {item.viewNum}
-                            </Space>
-                        </List.Item>
-                    )}
-                />
-            </Card>
+                                    </h3>
+                                    <div className="rank-views">
+                                        <span className="eye-icon">👁️</span>
+                                        {item.viewNum} 次浏览
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

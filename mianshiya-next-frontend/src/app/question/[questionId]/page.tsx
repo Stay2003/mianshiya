@@ -9,16 +9,10 @@ import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import "./index.css"
 
-interface PageProps {
-    params: {
-        questionId: string
-    }
-}
-
-export default function QuestionPage({ params }: PageProps) {
+export default function QuestionPage({ params }: { params: { questionId: string } }) {
     const { questionId } = params
     const searchParams = useSearchParams()
-    const fromFavorites = searchParams?.get("fromFavorites") === "true"
+    const fromFavorites = searchParams.get("fromFavorites") === "true"
 
     const [showAnswer, setShowAnswer] = useState(false)
     const [question, setQuestion] = useState<API.QuestionVO | null>(null)
@@ -29,21 +23,21 @@ export default function QuestionPage({ params }: PageProps) {
         async function fetchQuestionAndFavourStatus() {
             setLoading(true)
             try {
-                const questionRes = await getQuestionVoByIdUsingGet({ id: Number(questionId) })
-                if (questionRes.data?.code === 0 && questionRes.data.data) {
-                    setQuestion(questionRes.data.data)
+                const questionRes = await getQuestionVoByIdUsingGet({ id: questionId })
+                if (questionRes.code === 0 && questionRes.data) {
+                    setQuestion(questionRes.data)
 
                     try {
-                        const favourRes = await getQuestionFavourUsingGet({ questionId: Number(questionId) })
-                        if (favourRes.data?.code === 0) {
-                            setIsFavour(favourRes.data.data)
+                        const favourRes = await getQuestionFavourUsingGet({ questionId })
+                        if (favourRes.code === 0) {
+                            setIsFavour(favourRes.data)
                         }
                     } catch (favourError) {
                         console.error("Failed to fetch favourite status:", favourError)
                         setIsFavour(fromFavorites)
                     }
                 } else {
-                    message.error(questionRes.data?.message || "获取题目详情失败")
+                    message.error(questionRes.message || "获取题目详情失败")
                 }
             } catch (e: any) {
                 message.error("获取题目信息失败，" + e.message)
